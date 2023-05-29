@@ -1,0 +1,16 @@
+engine:
+  processors:
+    - lua_processor@variable_name
+    - lua_processor@*module_name
+
+translator:
+  dictionary: parent
+
+variant:
+  opencc_config: oc.json
+
+emoji:
+  opencc_config: emoji.json
+
+punctuator:
+  import_preset: sym

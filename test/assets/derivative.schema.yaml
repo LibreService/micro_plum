@@ -1,0 +1,5 @@
+__include: base.schema:/
+
+punctuator:
+  full_shape:
+    __include: default:/punctuator/full_shape

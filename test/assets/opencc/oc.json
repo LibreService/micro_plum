@@ -1,0 +1,17 @@
+{
+  "segmentation": {
+    "dict": {
+      "file": "a.txt"
+    }
+  },
+  "conversion_chain": [{
+    "dict": {
+      "file": "b.txt",
+      "dicts": [
+        {
+          "file": "c.txt"
+        }
+      ]
+    }
+  }]
+}

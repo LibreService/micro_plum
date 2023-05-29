@@ -1,0 +1,35 @@
+name: build
+
+on: push
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - name: Use Node.js latest
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18.x
+      - name: Install node dependencies
+        run: |
+          npm i -g pnpm
+          pnpm i
+      - name: Run lint
+        run: |
+          pnpm run lint
+      - name: Type check
+        run: |
+          pnpm run check
+      - name: Build
+        run: |
+          pnpm run build
+      - name: Coverage
+        run: |
+          pnpm run coverage

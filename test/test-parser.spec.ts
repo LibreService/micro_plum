@@ -1,0 +1,69 @@
+import { readFileSync } from 'fs'
+import yaml from 'js-yaml'
+import { expect, it } from 'vitest'
+import {
+  parseOpenCC,
+  parseSchema,
+  parseDict,
+  parseLua
+} from '../src/parser'
+
+const prefix = 'test/assets/'
+
+it('Parse OpenCC config', () => {
+  const content = readFileSync(prefix + 'opencc/oc.json', { encoding: 'utf-8' })
+  const obj = JSON.parse(content)
+  expect(parseOpenCC(obj)).toEqual([
+    'a.txt',
+    'b.txt',
+    'c.txt'
+  ])
+})
+
+function loadYaml (file: string) {
+  return yaml.loadAll(readFileSync(prefix + file, { encoding: 'utf-8' }))[0] as object
+}
+
+const schemaCases = {
+  'base.schema.yaml': [
+    'rime.lua',
+    'lua/module_name.lua',
+    'parent.dict.yaml',
+    'oc.json',
+    'emoji.json',
+    'sym.yaml'
+  ],
+  'derivative.schema.yaml': [
+    'base.schema.yaml',
+    'default.yaml'
+  ]
+}
+
+it('Parse schema', () => {
+  for (const [file, expected] of Object.entries(schemaCases)) {
+    const obj = loadYaml(file)
+    expect(parseSchema(obj)).toEqual(expected)
+  }
+})
+
+const dictCases = {
+  'parent.dict.yaml': [
+    'my-essay.txt',
+    'child.dict.yaml'
+  ]
+}
+
+it('Parse dict', () => {
+  for (const [file, expected] of Object.entries(dictCases)) {
+    const obj = loadYaml(file)
+    expect(parseDict(obj)).toEqual(expected)
+  }
+})
+
+it('Parse Lua', () => {
+  const content = readFileSync(prefix + 'rime.lua', { encoding: 'utf-8' })
+  expect(parseLua(content)).toEqual([
+    'lua/processor.lua',
+    'lua/segmentors/segmentor.lua'
+  ])
+})
