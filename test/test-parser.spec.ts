@@ -60,10 +60,19 @@ it('Parse dict', () => {
   }
 })
 
-it('Parse Lua', () => {
-  const content = readFileSync(prefix + 'rime.lua', { encoding: 'utf-8' })
-  expect(parseLua(content)).toEqual([
+const luaCases = {
+  'rime.lua': [
     'lua/processor.lua',
     'lua/segmentors/segmentor.lua'
-  ])
+  ],
+  'lua/segmentors/segmentor.lua': [
+    'lua/utils/util.lua'
+  ]
+}
+
+it('Parse Lua', () => {
+  for (const [file, expected] of Object.entries(luaCases)) {
+    const content = readFileSync(prefix + file, { encoding: 'utf-8' })
+    expect(parseLua(content)).toEqual(expected)
+  }
 })

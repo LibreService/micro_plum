@@ -11,9 +11,9 @@ export function parseLua (content: string) {
         base.name === 'require' &&
         args.length === 1) {
           const arg = args[0]
-          if (arg.type === 'StringLiteral' && arg.raw.match(/'[_a-zA-Z0-9.]+'|"[_a-zA-Z0-9.]+"/)) {
+          if (arg.type === 'StringLiteral' && arg.raw.match(/'[_a-zA-Z0-9./]+'|"[_a-zA-Z0-9./]+"/)) {
             const module = arg.raw.slice(1, -1)
-            result.push(`lua/${module.split('.').join('/')}.lua`)
+            result.push(`lua/${module.replaceAll('.', '/')}.lua`)
           }
         }
       }

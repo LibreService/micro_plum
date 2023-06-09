@@ -65,12 +65,10 @@ globalThis.fetch = async (url: string) => {
   if (url.indexOf('network_error') >= 0) {
     throw new Error('Network Error')
   }
-  let file = url.slice(url.lastIndexOf('/') + 1)
-  if (file.endsWith('.json')) {
-    file = 'opencc/' + file
-  }
+  const match = url.match(/(lua|opencc)\//)
+  const path = url.slice(match?.index || (url.lastIndexOf('/') + 1))
   try {
-    const ab = new Uint8Array(readFileSync(prefix + file)).buffer
+    const ab = new Uint8Array(readFileSync(prefix + path)).buffer
     return {
       ok: true,
       async arrayBuffer () {
@@ -126,6 +124,7 @@ it('Load recipe', async () => {
     'lua/module_name.lua',
     'lua/processor.lua',
     'lua/segmentors/segmentor.lua',
+    'lua/utils/util.lua',
     'my-essay.txt',
     'opencc/a.txt',
     'opencc/b.txt',
