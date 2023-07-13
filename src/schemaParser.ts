@@ -3,14 +3,16 @@ export function parseSchema (schema: object) {
 
   function parseInclude (obj: object) {
     for (const [key, value] of Object.entries(obj)) {
-      if (key === '__include') {
-        const i = value.indexOf(':')
-        if (i >= 0) {
-          let file = value.slice(0, i)
-          if (!file.endsWith('.yaml')) {
-            file += '.yaml'
+      if (key === '__include' || key === '__patch') {
+        for (const v of (typeof value === 'string' ? [value] : value) as string[]) {
+          const i = v.indexOf(':')
+          if (i >= 0) {
+            let file = v.slice(0, i)
+            if (!file.endsWith('.yaml')) {
+              file += '.yaml'
+            }
+            result.push(file)
           }
-          result.push(file)
         }
       } else if (value && typeof value === 'object') {
         parseInclude(value)

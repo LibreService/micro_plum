@@ -135,6 +135,7 @@ it('Load recipe', async () => {
     'opencc/c.txt',
     'opencc/oc.json',
     'parent.dict.yaml',
+    'pinyin.yaml',
     'rime.lua',
     'sym.yaml'
   ])

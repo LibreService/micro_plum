@@ -26,6 +26,7 @@ function loadYaml (file: string) {
 
 const schemaCases = {
   'base.schema.yaml': [
+    'pinyin.yaml',
     'rime.lua',
     'lua/module_name.lua',
     'parent.dict.yaml',
