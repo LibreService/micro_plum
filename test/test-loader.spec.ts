@@ -105,13 +105,17 @@ it('CDN prefix', () => {
   }
 })
 
+const genericRecipeTestCases = {
+  essay: ['essay.txt'],
+  emoji: ['emoji_suggestion.yaml', 'opencc/emoji.json']
+}
+
 it('Load generic recipe', async () => {
-  const recipe = new Recipe('essay')
-  const result = await recipe.load()
-  expect(result).toEqual([{
-    file: 'essay.txt',
-    content: undefined
-  }])
+  for (const [target, files] of Object.entries(genericRecipeTestCases)) {
+    const recipe = new Recipe(target)
+    const result = await recipe.load()
+    expect(result.map(item => item.file).sort()).toEqual(files)
+  }
 })
 
 it('Load recipe', async () => {

@@ -137,7 +137,8 @@ class Recipe {
   }
 
   async loadFile (file: string) {
-    if (file === 'opencc/emoji.json') {
+    // Don't download emoji.json from current repo, unless this is the emoji repo
+    if (file === 'opencc/emoji.json' && this.repo !== 'rime/rime-emoji') {
       return
     }
     if (file in this.loadedFiles) {
