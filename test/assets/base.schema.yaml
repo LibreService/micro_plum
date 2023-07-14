@@ -1,7 +1,7 @@
 engine:
   processors:
     - lua_processor@variable_name
-    - lua_processor@*module_name
+    - lua_processor@*sub_dir/module_name
 
 speller:
   algebra:
