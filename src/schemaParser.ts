@@ -43,8 +43,10 @@ export function parseSchema (schema: object) {
         }
         break
       case 'translator': {
-        const dictYaml = value.dictionary + '.dict.yaml'
-        result.push(dictYaml)
+        if (value.dictionary) {
+          const dictYaml = value.dictionary + '.dict.yaml'
+          result.push(dictYaml)
+        }
         break
       }
       case 'punctuator':

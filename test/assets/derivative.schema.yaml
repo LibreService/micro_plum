@@ -1,5 +1,8 @@
 __include: base.schema:/
 
+translator:
+  prism: derivative
+
 punctuator:
   full_shape:
     __include: default:/punctuator/full_shape
