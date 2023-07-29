@@ -2,6 +2,9 @@ engine:
   processors:
     - lua_processor@variable_name
     - lua_processor@*sub_dir/module_name
+  __patch:
+    filters:
+      - simplifier
 
 speller:
   algebra:

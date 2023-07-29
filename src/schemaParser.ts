@@ -4,7 +4,15 @@ export function parseSchema (schema: object) {
   function parseInclude (obj: object) {
     for (const [key, value] of Object.entries(obj)) {
       if (key === '__include' || key === '__patch') {
-        for (const v of (typeof value === 'string' ? [value] : value) as string[]) {
+        let values: string[]
+        if (typeof value === 'string') {
+          values = [value]
+        } else if (Array.isArray(value)) {
+          values = value
+        } else {
+          return parseInclude(value)
+        }
+        for (const v of values) {
           const i = v.indexOf(':')
           if (i >= 0) {
             let file = v.slice(0, i)
