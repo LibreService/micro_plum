@@ -67,6 +67,7 @@ const luaCases = {
     'lua/segmentors/segmentor.lua'
   ],
   'lua/segmentors/segmentor.lua': [
+    'lua/external.lua',
     'lua/utils/util.lua'
   ]
 }

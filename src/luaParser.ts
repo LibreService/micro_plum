@@ -8,7 +8,7 @@ export function parseLua (content: string) {
       if (node.type === 'CallExpression') {
         const { base, arguments: args } = node
         if (base.type === 'Identifier' &&
-        base.name === 'require' &&
+        (base.name === 'require' || base.name === 'dofile') &&
         args.length === 1) {
           const arg = args[0]
           if (arg.type === 'StringLiteral' && arg.raw.match(/'[_a-zA-Z0-9./]+'|"[_a-zA-Z0-9./]+"/)) {

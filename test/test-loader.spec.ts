@@ -137,6 +137,7 @@ it('Load recipe', async () => {
     'base.schema.yaml',
     'base_dup.schema.yaml',
     'child.dict.yaml',
+    'lua/external.lua',
     'lua/processor.lua',
     'lua/segmentors/segmentor.lua',
     'lua/sub_dir/module_name.lua',
