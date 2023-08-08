@@ -3,7 +3,7 @@ export function parseDict (schema: object) {
   for (const [key, value] of Object.entries(schema)) {
     switch (key) {
       case 'import_tables':
-        for (const file of value) {
+        for (const file of value || []) {
           result.push(file + '.dict.yaml')
         }
         break

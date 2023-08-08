@@ -1,5 +1,6 @@
 ---
 version: "1.0"
+import_tables: # no value
 ...
 
 〇	ling
