@@ -38,6 +38,18 @@ const normalizeTargetCases = {
     branch: 'master',
     path: 'path/to/',
     schema: 'baz'
+  },
+  'http://github.com/foo/bar/blob/HEAD/%E4%B8%AD%E6%96%87/%E6%96%B9%E6%A1%88.schema.yaml': {
+    repo: 'foo/bar',
+    branch: undefined,
+    path: '%E4%B8%AD%E6%96%87/',
+    schema: '%E6%96%B9%E6%A1%88'
+  },
+  'https://raw.githubusercontent.com/foo/bar/master/path/to/baz.schema.yaml': {
+    repo: 'foo/bar',
+    branch: 'master',
+    path: 'path/to/',
+    schema: 'baz'
   }
 }
 

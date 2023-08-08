@@ -17,12 +17,13 @@ function matchPlum (target: string) {
 }
 
 function matchSchema (target: string) {
-  const match = target.match(/(^https?:\/\/)?github\.com\/([-_a-zA-Z0-9]+\/[-_a-zA-Z0-9]+)\/blob\/([-_a-zA-Z0-9]+)\/(([-_a-zA-Z0-9]+\/)*)([-_a-zA-Z0-9]+)\.schema\.yaml$/)
+  const match = target.match(/(^https?:\/\/)?github\.com\/([-_a-zA-Z0-9]+\/[-_a-zA-Z0-9]+)\/blob\/([-_a-zA-Z0-9]+)\/(([-_a-zA-Z0-9%]+\/)*)([-_a-zA-Z0-9%]+)\.schema\.yaml$/) ||
+    target.match(/(^https?:\/\/)?raw\.githubusercontent\.com\/([-_a-zA-Z0-9]+\/[-_a-zA-Z0-9]+)\/([-_a-zA-Z0-9]+)\/(([-_a-zA-Z0-9%]+\/)*)([-_a-zA-Z0-9%]+)\.schema\.yaml$/)
   if (!match) {
     return undefined
   }
   const repo = match[2]
-  const branch = match[3]
+  const branch = match[3] === 'HEAD' ? undefined : match[3]
   const path = match[4] || ''
   const schema = match[6]
   return { repo, branch, path, schema }
