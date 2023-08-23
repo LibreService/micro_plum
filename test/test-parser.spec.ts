@@ -29,6 +29,7 @@ const schemaCases = {
     'pinyin.yaml',
     'rime.lua',
     'lua/sub_dir/module_name.lua',
+    'lua/sub_dir/module_name_1.lua',
     'parent.dict.yaml',
     'oc.json',
     'emoji.json',

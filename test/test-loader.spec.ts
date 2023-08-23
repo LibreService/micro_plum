@@ -141,6 +141,7 @@ it('Load recipe', async () => {
     'lua/processor.lua',
     'lua/segmentors/segmentor.lua',
     'lua/sub_dir/module_name.lua',
+    'lua/sub_dir/module_name_1.lua',
     'lua/utils/util.lua',
     'my-essay.txt',
     'opencc/a.txt',

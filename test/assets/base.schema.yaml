@@ -2,6 +2,7 @@ engine:
   processors:
     - lua_processor@variable_name
     - lua_processor@*sub_dir/module_name
+    - lua_processor@*sub_dir/module_name_1@processor
   __patch:
     filters:
       - simplifier

@@ -36,7 +36,7 @@ export function parseSchema (schema: object) {
         for (const component of ['processor', 'segmentor', 'translator', 'filter']) {
           const name = component + 's'
           if (name in value) {
-            const pattern = RegExp(`^lua_${component}@(\\*)?([_a-zA-Z0-9]+(/[_a-zA-Z0-9]+)*)$`)
+            const pattern = RegExp(`^lua_${component}@(\\*)?([_a-zA-Z0-9]+(/[_a-zA-Z0-9]+)*)(@[_a-zA-Z0-9]+)?$`)
             for (const item of value[name] as string[]) {
               const match = item.match(pattern)
               if (match) {
