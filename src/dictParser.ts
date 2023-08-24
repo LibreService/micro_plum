@@ -1,4 +1,4 @@
-export function parseDict (schema: object) {
+export function parseDict (schema: object): string[][] {
   const result: string[] = []
   for (const [key, value] of Object.entries(schema)) {
     switch (key) {
@@ -12,5 +12,5 @@ export function parseDict (schema: object) {
         break
     }
   }
-  return result
+  return result.map(file => [file])
 }

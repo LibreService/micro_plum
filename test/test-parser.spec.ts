@@ -14,9 +14,9 @@ it('Parse OpenCC config', () => {
   const content = readFileSync(prefix + 'opencc/oc.json', { encoding: 'utf-8' })
   const obj = JSON.parse(content)
   expect(parseOpenCC(obj)).toEqual([
-    'a.txt',
-    'b.txt',
-    'c.txt'
+    ['a.txt'],
+    ['b.txt'],
+    ['c.txt']
   ])
 })
 
@@ -26,18 +26,18 @@ function loadYaml (file: string) {
 
 const schemaCases = {
   'base.schema.yaml': [
-    'pinyin.yaml',
-    'rime.lua',
-    'lua/sub_dir/module_name.lua',
-    'lua/sub_dir/module_name_1.lua',
-    'parent.dict.yaml',
-    'oc.json',
-    'emoji.json',
-    'sym.yaml'
+    ['pinyin.yaml'],
+    ['rime.lua'],
+    ['lua/sub_dir/module_name.lua', 'lua/sub_dir/module_name/init.lua'],
+    ['lua/sub_dir/module_name_1.lua', 'lua/sub_dir/module_name_1/init.lua'],
+    ['parent.dict.yaml'],
+    ['oc.json'],
+    ['emoji.json'],
+    ['sym.yaml']
   ],
   'derivative.schema.yaml': [
-    'base.schema.yaml',
-    'default.yaml'
+    ['base.schema.yaml'],
+    ['default.yaml']
   ]
 }
 
@@ -50,8 +50,8 @@ it('Parse schema', () => {
 
 const dictCases = {
   'parent.dict.yaml': [
-    'my-essay.txt',
-    'child.dict.yaml'
+    ['my-essay.txt'],
+    ['child.dict.yaml']
   ]
 }
 
@@ -64,12 +64,12 @@ it('Parse dict', () => {
 
 const luaCases = {
   'rime.lua': [
-    'lua/processor.lua',
-    'lua/segmentors/segmentor.lua'
+    ['lua/processor.lua', 'lua/processor/init.lua'],
+    ['lua/segmentors/segmentor.lua', 'lua/segmentors/segmentor/init.lua']
   ],
   'lua/segmentors/segmentor.lua': [
-    'lua/external.lua',
-    'lua/utils/util.lua'
+    ['lua/external.lua', 'lua/external/init.lua'],
+    ['lua/utils/util.lua', 'lua/utils/util/init.lua']
   ]
 }
 

@@ -72,6 +72,7 @@ it('OpenCC URL', () => {
   }
 })
 
+// Mock fetch so that it returns content for files that exist under test/assets, otherwise 404
 // @ts-ignore
 globalThis.fetch = async (url: string) => {
   if (url.indexOf('network_error') >= 0) {
@@ -138,11 +139,17 @@ it('Load recipe', async () => {
     'base_dup.schema.yaml',
     'child.dict.yaml',
     'lua/external.lua',
+    'lua/external/init.lua',
     'lua/processor.lua',
+    'lua/processor/init.lua',
     'lua/segmentors/segmentor.lua',
+    // no lua/segmentors/segmentor/init.lua as segmentor.lua exists
     'lua/sub_dir/module_name.lua',
+    'lua/sub_dir/module_name/init.lua',
     'lua/sub_dir/module_name_1.lua',
+    'lua/sub_dir/module_name_1/init.lua',
     'lua/utils/util.lua',
+    'lua/utils/util/init.lua',
     'my-essay.txt',
     'opencc/a.txt',
     'opencc/b.txt',

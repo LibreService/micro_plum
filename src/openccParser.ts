@@ -16,7 +16,7 @@ export function parseOpenCC (config: {
       }
     }
   ]
-}) {
+}): string[][] {
   const result: string[] = []
   const add = (file: string) => !result.includes(file) && result.push(file)
   add(config.segmentation.dict.file)
@@ -29,5 +29,5 @@ export function parseOpenCC (config: {
       }
     }
   }
-  return result
+  return result.map(file => [file])
 }

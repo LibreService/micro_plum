@@ -1,6 +1,7 @@
 import { parse, Node } from 'luaparse'
+import { expandLua } from './util'
 
-export function parseLua (content: string) {
+export function parseLua (content: string): string[][] {
   const result: string[] = []
   parse(content, {
     luaVersion: '5.3',
@@ -19,5 +20,5 @@ export function parseLua (content: string) {
       }
     }
   })
-  return result
+  return result.map(expandLua)
 }

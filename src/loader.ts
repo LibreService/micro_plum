@@ -75,19 +75,19 @@ for (let i = 0; i < builtinOpenCC.length; ++i) {
 
 const openccCDN = 'https://cdn.jsdelivr.net/npm/@libreservice/my-opencc@0.2.0/dist/'
 
-const generic: { [key: string]: string[] } = {
+const generic: { [key: string]: string[][] } = {
   'rime/rime-emoji': [
-    'emoji_suggestion.yaml',
-    'opencc/emoji.json'
+    ['emoji_suggestion.yaml'],
+    ['opencc/emoji.json']
   ],
   'rime/rime-essay': [
-    'essay.txt'
+    ['essay.txt']
   ],
   'rime/rime-prelude': [
-    'default.yaml',
-    'key_bindings.yaml',
-    'punctuation.yaml',
-    'symbols.yaml'
+    ['default.yaml'],
+    ['key_bindings.yaml'],
+    ['punctuation.yaml'],
+    ['symbols.yaml']
   ]
 }
 
@@ -137,79 +137,83 @@ class Recipe {
     return this.prefix + file
   }
 
-  async loadFile (file: string) {
-    // Don't download emoji.json from current repo, unless this is the emoji repo
-    if (file === 'opencc/emoji.json' && this.repo !== 'rime/rime-emoji') {
-      return
-    }
-    if (file in this.loadedFiles) {
-      return
-    }
-    this.loadedFiles[file] = undefined
-    const url = this.getURL(file)
-    let content: Uint8Array
-    try {
-      content = await download(url)
-    } catch (e) {
-      this.onDownloadFailure && this.onDownloadFailure(url, typeof e === 'number' ? e : (e as Error).message)
-      return
-    }
-    this.loadedFiles[file] = content
+  async loadFileGroup (fileGroup: string[]) {
+    const errors: [string, (number | string)][] = []
+    for (const file of fileGroup) {
+      // Don't download emoji.json from current repo, unless this is the emoji repo
+      if (file === 'opencc/emoji.json' && this.repo !== 'rime/rime-emoji') {
+        return
+      }
+      if (file in this.loadedFiles) {
+        continue
+      }
+      this.loadedFiles[file] = undefined
+      const url = this.getURL(file)
+      let content: Uint8Array
+      try {
+        content = await download(url)
+      } catch (e) {
+        errors.push([url, typeof e === 'number' ? e : (e as Error).message])
+        continue
+      }
+      this.loadedFiles[file] = content
 
-    const promises: Promise<any>[] = []
+      const promises: Promise<any>[] = []
 
-    if (file.endsWith('.yaml')) {
-      const s = u2s(content)
-      let obj: object
-      if (file.endsWith('.schema.yaml')) {
-        try {
-          obj = yaml.load(s) as object
-        } catch {
-          throw new Error(`Invalid ${file}`)
-        }
-        const newFiles = parseSchema(obj)
-        for (const newFile of newFiles) {
-          if (newFile.endsWith('.json')) {
-            promises.push(this.loadFile('opencc/' + newFile))
-          } else {
-            promises.push(this.loadFile(newFile))
+      if (file.endsWith('.yaml')) {
+        const s = u2s(content)
+        let obj: object
+        if (file.endsWith('.schema.yaml')) {
+          try {
+            obj = yaml.load(s) as object
+          } catch {
+            throw new Error(`Invalid ${file}`)
+          }
+          const newFileGroups = parseSchema(obj)
+          for (const newFileGroup of newFileGroups) {
+            promises.push(this.loadFileGroup(newFileGroup.map(newFile => newFile.endsWith('.json') ? `opencc/${newFile}` : newFile)))
+          }
+        } else if (file.endsWith('.dict.yaml')) {
+          let obj: object
+          try {
+            obj = yaml.loadAll(s)[0] as object
+          } catch {
+            const start = s.match(/(^|\n)---\n/)?.index
+            obj = yaml.load(s.slice(start, s.indexOf('\n...'))) as object // some tables contain invalid syntax
+          }
+          const newFileGroups = parseDict(obj)
+          for (const newFileGroup of newFileGroups) {
+            promises.push(this.loadFileGroup(newFileGroup))
           }
         }
-      } else if (file.endsWith('.dict.yaml')) {
-        let obj: object
-        try {
-          obj = yaml.loadAll(s)[0] as object
-        } catch {
-          const start = s.match(/(^|\n)---\n/)?.index
-          obj = yaml.load(s.slice(start, s.indexOf('\n...'))) as object // some tables contain invalid syntax
+      } else if (file.endsWith('.json')) {
+        const obj = JSON.parse(u2s(content))
+        const newFileGroups = parseOpenCC(obj)
+        for (const newFileGroup of newFileGroups) {
+          promises.push(this.loadFileGroup(newFileGroup.map(newFile => `opencc/${newFile}`)))
         }
-        const newFiles = parseDict(obj)
-        for (const newFile of newFiles) {
-          promises.push(this.loadFile(newFile))
+      } else if (file.endsWith('.lua')) {
+        const newFileGroups = parseLua(u2s(content))
+        for (const newFileGroup of newFileGroups) {
+          promises.push(this.loadFileGroup(newFileGroup))
         }
       }
-    } else if (file.endsWith('.json')) {
-      const obj = JSON.parse(u2s(content))
-      const newFiles = parseOpenCC(obj)
-      for (const newFile of newFiles) {
-        promises.push(this.loadFile('opencc/' + newFile))
-      }
-    } else if (file.endsWith('.lua')) {
-      const newFiles = parseLua(u2s(content))
-      for (const newFile of newFiles) {
-        promises.push(this.loadFile(newFile))
+      return Promise.all(promises)
+    }
+    if (this.onDownloadFailure) {
+      for (const [url, error] of errors) {
+        this.onDownloadFailure(url, error)
       }
     }
-    return Promise.all(promises)
   }
 
   async load () {
     if (this.repo in generic) {
-      await Promise.all(generic[this.repo].map(file => this.loadFile(file)))
+      await Promise.all(generic[this.repo].map(fileGroup => this.loadFileGroup(fileGroup)))
     } else {
       await Promise.all(this.schemaIds.map(async schemaId => {
         const file = `${schemaId}.schema.yaml`
-        return this.loadFile(file)
+        return this.loadFileGroup([file])
       }))
     }
     return Object.entries(this.loadedFiles).map(([file, content]) => ({ file, content }))

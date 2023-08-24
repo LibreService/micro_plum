@@ -1,4 +1,6 @@
-export function parseSchema (schema: object) {
+import { expandLua } from './util'
+
+export function parseSchema (schema: object): string[][] {
   const result: string[] = []
 
   function parseInclude (obj: object) {
@@ -67,5 +69,5 @@ export function parseSchema (schema: object) {
       result.push(value.opencc_config)
     }
   }
-  return result
+  return result.map(expandLua)
 }
