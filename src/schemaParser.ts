@@ -4,7 +4,7 @@ export function parseSchema (schema: object): string[][] {
   const result: string[] = []
 
   function parseInclude (obj: object) {
-    for (const [key, value] of Object.entries(obj)) {
+    for (const [key, value] of Object.entries(obj)) { // also works for Array
       if (key === '__include' || key === '__patch') {
         let values: string[]
         if (typeof value === 'string') {
@@ -15,13 +15,17 @@ export function parseSchema (schema: object): string[][] {
           return parseInclude(value)
         }
         for (const v of values) {
-          const i = v.indexOf(':')
-          if (i >= 0) {
-            let file = v.slice(0, i)
-            if (!file.endsWith('.yaml')) {
-              file += '.yaml'
+          if (typeof v === 'string') {
+            const i = v.indexOf(':')
+            if (i >= 0) {
+              let file = v.slice(0, i)
+              if (!file.endsWith('.yaml')) {
+                file += '.yaml'
+              }
+              result.push(file)
             }
-            result.push(file)
+          } else if (v && typeof v === 'object') {
+            parseInclude(v)
           }
         }
       } else if (value && typeof value === 'object') {

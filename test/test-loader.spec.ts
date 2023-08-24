@@ -151,6 +151,7 @@ it('Load recipe', async () => {
     'lua/utils/util.lua',
     'lua/utils/util/init.lua',
     'my-essay.txt',
+    'nested.yaml',
     'opencc/a.txt',
     'opencc/b.txt',
     'opencc/c.txt',

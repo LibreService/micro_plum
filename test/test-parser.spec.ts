@@ -27,6 +27,7 @@ function loadYaml (file: string) {
 const schemaCases = {
   'base.schema.yaml': [
     ['pinyin.yaml'],
+    ['nested.yaml'],
     ['rime.lua'],
     ['lua/sub_dir/module_name.lua', 'lua/sub_dir/module_name/init.lua'],
     ['lua/sub_dir/module_name_1.lua', 'lua/sub_dir/module_name_1/init.lua'],
