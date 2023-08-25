@@ -1,9 +1,13 @@
 import { readFileSync } from 'fs'
 import { expect, it } from 'vitest'
 import {
-  normalizeTarget,
   Recipe
 } from '../src/loader'
+import {
+  normalizeTarget,
+  GitHubDownloader,
+  JsDelivrDownloader
+} from '../src/downloader'
 
 const prefix = 'test/assets/'
 
@@ -60,15 +64,13 @@ it('Normalize target', () => {
 })
 
 it('OpenCC URL', () => {
-  const recipe = new Recipe('foo/bar', {
-    source: 'jsDelivr'
-  })
+  const loader = new JsDelivrDownloader('foo/bar')
   for (const [file, url] of [
     ['opencc/t2tw.json', 'https://cdn.jsdelivr.net/npm/@libreservice/my-opencc@0.2.0/dist/opencc/t2tw.json'],
     ['opencc/TWPhrases.ocd2', 'https://cdn.jsdelivr.net/npm/@libreservice/my-opencc@0.2.0/dist/opencc/TWPhrases.ocd2'],
     ['opencc/random.json', 'https://cdn.jsdelivr.net/gh/foo/bar/opencc/random.json']
   ]) {
-    expect(recipe.getURL(file)).toEqual(url)
+    expect(loader.getURL(file)).toEqual(url)
   }
 })
 
@@ -97,7 +99,7 @@ globalThis.fetch = async (url: string) => {
 }
 
 it('Invalid recipe', () => {
-  expect(() => new Recipe('@foo')).toThrowError('Invalid target')
+  expect(() => new GitHubDownloader('@foo')).toThrowError('Invalid target')
 })
 
 const cdnUrlCases: {
@@ -113,8 +115,8 @@ const cdnUrlCases: {
 
 it('CDN prefix', () => {
   for (const { source, target, prefix } of cdnUrlCases) {
-    const recipe = new Recipe(target, { source })
-    expect(recipe.getPrefix()).toEqual(prefix)
+    const loader = new (source === 'GitHub' ? GitHubDownloader : JsDelivrDownloader)(target)
+    expect(loader.getPrefix()).toEqual(prefix)
   }
 })
 
@@ -125,14 +127,14 @@ const genericRecipeTestCases = {
 
 it('Load generic recipe', async () => {
   for (const [target, files] of Object.entries(genericRecipeTestCases)) {
-    const recipe = new Recipe(target)
+    const recipe = new Recipe(new GitHubDownloader(target))
     const result = await recipe.load()
     expect(result.map(item => item.file).sort()).toEqual(files)
   }
 })
 
 it('Load recipe', async () => {
-  const recipe = new Recipe('random', { schemaIds: ['base', 'base_dup'] })
+  const recipe = new Recipe(new GitHubDownloader('random', ['base', 'base_dup']))
   const result = await recipe.load()
   expect(result.map(item => item.file).sort()).toEqual([
     'base.schema.yaml',
@@ -171,9 +173,8 @@ const downloadFailureCases = {
 it('Download failure', async () => {
   for (const [schema, reason] of Object.entries(downloadFailureCases)) {
     let _reason: any
-    const recipe = new Recipe('random', {
-      schemaIds: [schema],
-      onDownloadFailure (url: string, reason: number | string) {
+    const recipe = new Recipe(new GitHubDownloader('random', [schema]), {
+      onLoadFailure (url: string, reason: number | string) {
         _reason = reason
       }
     })
@@ -186,5 +187,5 @@ it('Download failure', async () => {
 })
 
 it('Invalid .schema.yaml', () => {
-  expect(() => new Recipe('https://github.com/foo/bar/blob/master/wrong.schema.yaml').load()).rejects.toThrow('Invalid wrong.schema.yaml')
+  expect(() => new Recipe(new GitHubDownloader('https://github.com/foo/bar/blob/master/wrong.schema.yaml')).load()).rejects.toThrow('Invalid wrong.schema.yaml')
 })
