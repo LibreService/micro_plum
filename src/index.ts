@@ -10,3 +10,7 @@ export {
   GitHubDownloader,
   JsDelivrDownloader
 } from './downloader'
+
+export {
+  getBinaryNames
+} from './parser'

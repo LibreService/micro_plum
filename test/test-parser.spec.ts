@@ -4,6 +4,7 @@ import { expect, it } from 'vitest'
 import {
   parseOpenCC,
   parseSchema,
+  getBinaryNames,
   parseDict,
   parseLua
 } from '../src/parser'
@@ -47,6 +48,12 @@ it('Parse schema', () => {
     const obj = loadYaml(file)
     expect(parseSchema(obj)).toEqual(expected)
   }
+})
+
+it('getBinaryNames', () => {
+  const obj = loadYaml('base.schema.yaml')
+  expect(getBinaryNames(obj)).toEqual({ dict: 'parent', prism: 'parent' })
+  expect(getBinaryNames({})).toEqual({})
 })
 
 const dictCases = {

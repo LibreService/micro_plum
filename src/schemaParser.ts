@@ -75,3 +75,13 @@ export function parseSchema (schema: object): string[][] {
   }
   return result.map(expandLua)
 }
+
+export function getBinaryNames (schema: { translator?:
+  { dictionary: string, prism?: string }
+}) {
+  if (schema.translator) {
+    const { dictionary, prism } = schema.translator
+    return { dict: dictionary, prism: prism || dictionary }
+  }
+  return {}
+}
