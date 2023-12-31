@@ -1,6 +1,6 @@
 {
   "name": "@libreservice/micro-plum",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "main": "dist/index.js",
   "type": "module",
   "files": [
@@ -19,21 +19,21 @@
     "lint:fix": "eslint --ext .ts,.mjs --fix scripts src test",
     "check": "tsc --noEmit",
     "build": "rm -rf dist && node scripts/build.mjs && tsc -d --emitDeclarationOnly",
-    "coverage": "vitest run --coverage test/"
+    "coverage": "vitest run --coverage.enabled --coverage.all=false test/"
   },
   "sideEffects": false,
   "devDependencies": {
-    "@types/js-yaml": "^4.0.5",
-    "@types/luaparse": "^0.2.9",
-    "@typescript-eslint/eslint-plugin": "^6.4.1",
-    "@vitest/coverage-v8": "^0.34.2",
-    "esbuild": "^0.19.2",
-    "eslint": "^8.47.0",
+    "@types/js-yaml": "^4.0.9",
+    "@types/luaparse": "^0.2.12",
+    "@typescript-eslint/eslint-plugin": "^6.16.0",
+    "@vitest/coverage-v8": "^1.1.0",
+    "esbuild": "^0.19.11",
+    "eslint": "^8.56.0",
     "eslint-config-standard": "^17.1.0",
     "js-yaml": "^4.1.0",
     "luaparse": "^0.3.1",
-    "typescript": "^5.1.6",
-    "vitest": "^0.34.2"
+    "typescript": "^5.3.3",
+    "vitest": "^1.1.0"
   },
   "peerDependencies": {
     "js-yaml": "^4.1.0",
