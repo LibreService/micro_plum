@@ -64,7 +64,7 @@ export function parseSchema (schema: object): string[][] {
         break
       }
       case 'punctuator':
-        if (value.import_preset && !['default', 'symbols'].includes(value.import_preset)) {
+        if (value.import_preset && !['default'].includes(value.import_preset)) {
           result.push(value.import_preset + '.yaml')
         }
         break
