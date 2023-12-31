@@ -1,6 +1,22 @@
 import { FileLoader } from './loader'
 
 const builtinOpenCC = [
+  'HKVariants.ocd2',
+  'HKVariantsRev.ocd2',
+  'HKVariantsRevPhrases.ocd2',
+  'JPShinjitaiCharacters.ocd2',
+  'JPShinjitaiPhrases.ocd2',
+  'JPVariants.ocd2',
+  'JPVariantsRev.ocd2',
+  'STCharacters.ocd2',
+  'STPhrases.ocd2',
+  'TSCharacters.ocd2',
+  'TSPhrases.ocd2',
+  'TWPhrases.ocd2',
+  'TWPhrasesRev.ocd2',
+  'TWVariants.ocd2',
+  'TWVariantsRev.ocd2',
+  'TWVariantsRevPhrases.ocd2',
   'hk2s.json',
   'hk2t.json',
   'jp2t.json',
@@ -89,7 +105,7 @@ abstract class Downloader implements FileLoader {
   }
 
   getURL (file: string) {
-    if (builtinOpenCC.includes(file) || file.endsWith('.ocd2')) {
+    if (builtinOpenCC.includes(file)) {
       return openccCDN + file
     }
     return this.prefix + file
