@@ -142,6 +142,7 @@ it('Load recipe', async () => {
     'child.dict.yaml',
     'lua/external.lua',
     'lua/external/init.lua',
+    'lua/extra.txt',
     'lua/processor.lua',
     'lua/processor/init.lua',
     'lua/segmentors/segmentor.lua',
