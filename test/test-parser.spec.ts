@@ -77,7 +77,8 @@ const luaCases = {
   ],
   'lua/segmentors/segmentor.lua': [
     ['lua/external.lua', 'lua/external/init.lua'],
-    ['lua/utils/util.lua', 'lua/utils/util/init.lua']
+    ['lua/utils/util.lua', 'lua/utils/util/init.lua'],
+    ['lua/extra.txt']
   ]
 }
 
