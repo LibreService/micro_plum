@@ -1,6 +1,6 @@
 {
   "name": "@libreservice/micro-plum",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "main": "dist/index.js",
   "type": "module",
   "files": [
@@ -25,15 +25,15 @@
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
     "@types/luaparse": "^0.2.12",
-    "@typescript-eslint/eslint-plugin": "^6.16.0",
-    "@vitest/coverage-v8": "^1.1.0",
-    "esbuild": "^0.19.11",
-    "eslint": "^8.56.0",
+    "@typescript-eslint/eslint-plugin": "^7.16.1",
+    "@vitest/coverage-v8": "^2.0.3",
+    "esbuild": "^0.23.0",
+    "eslint": "^8.57.0",
     "eslint-config-standard": "^17.1.0",
     "js-yaml": "^4.1.0",
     "luaparse": "^0.3.1",
-    "typescript": "^5.3.3",
-    "vitest": "^1.1.0"
+    "typescript": "^5.5.3",
+    "vitest": "^2.0.3"
   },
   "peerDependencies": {
     "js-yaml": "^4.1.0",
